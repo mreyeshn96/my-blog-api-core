@@ -1,0 +1,7 @@
+﻿# IDE and Editor
+.vs
+.idea
+
+# Unnecessary files to upload
+obj
+bin
