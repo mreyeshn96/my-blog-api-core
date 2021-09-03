@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using my_app_backend.DAO;
 using my_app_backend.Database;
 
 namespace my_app_backend
@@ -30,9 +31,12 @@ namespace my_app_backend
         {
             // Database context.
             services.AddDbContext<BlogDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnectionString")));
-            
+            {
+                options.UseNpgsql(("name=ConnectionStrings:DefaultConnectionString"));
+            });
+                
             services.AddControllers();
+            services.AddTransient<CategoryDAO>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "my_app_backend", Version = "v1" });
