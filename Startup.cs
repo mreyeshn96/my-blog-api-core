@@ -19,6 +19,7 @@ namespace my_app_backend
 {
     public class Startup
     {
+        private readonly string _MyCors = "myPoliciesCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +38,18 @@ namespace my_app_backend
                 
             services.AddControllers();
             services.AddTransient<CategoryDAO>();
+            services.AddTransient<PostDAO>();
+
+            services.AddCors( options =>
+            {
+                options.AddPolicy(name: _MyCors, builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });    
+            });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "my_app_backend", Version = "v1" });
@@ -53,6 +66,7 @@ namespace my_app_backend
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "my_app_backend v1"));
             }
 
+            app.UseCors(this._MyCors);
             app.UseHttpsRedirection();
 
             app.UseRouting();
